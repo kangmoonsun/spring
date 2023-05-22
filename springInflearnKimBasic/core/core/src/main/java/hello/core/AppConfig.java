@@ -14,21 +14,35 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AppConfig {
+
+    // @Bean memberService -> new MemoryMemberRepository()
+    // @Bean orderService -> new MemoryMemberRepository()
+
+    //call AppConfig.memberService
+    //call AppConfig.memberRepository
+    //call AppConfig.memberRepository
+    //call AppConfig.orderService
+    //call AppConfig.memberRepository
+
+
+    // 5번이 아닌 3번만 호출됨 singleton 보증한다 이말이야!
     @Bean
     public MemberService memberService(){
+        System.out.println("call AppConfig.memberService");
         return new MemberServiceImpl(memberRepository());
     }
     @Bean
-    public static MemberRepository memberRepository() {
+    public MemberRepository memberRepository() {
+        System.out.println("AppConfig.memberRepository");
         return new MemoryMemberRepository();
     }
     @Bean
     public OrderService orderService() {
-        return new OrderServiceImpl(memberRepository(), DiscountPolicy());
+        System.out.println("AppConfig.orderService");
+        return new OrderServiceImpl(memberRepository(), discountPolicy());
     }
     @Bean
-    public static DiscountPolicy DiscountPolicy() {
-        return new FixDiscountPolicy();
-//        return new RateDiscountPolicy();
+    public DiscountPolicy discountPolicy() {
+        return new RateDiscountPolicy();
     }
 }
